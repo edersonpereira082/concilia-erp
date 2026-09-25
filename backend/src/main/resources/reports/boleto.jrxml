@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport name="boleto" language="java" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="30" rightMargin="30" topMargin="30" bottomMargin="30" uuid="a0a0a0a0-a0a0-40a0-a0a0-a0a0a0a0a0a0">
+  <parameter name="beneficiario" class="java.lang.String"/>
+  <parameter name="valor" class="java.lang.String"/>
+  <parameter name="vencimento" class="java.lang.String"/>
+  <title height="140">
+    <element kind="staticText" uuid="b1b1b1b1-b1b1-41b1-b1b1-b1b1b1b1b1b1" x="0" y="0" width="535" height="28">
+      <text><![CDATA[BOLETO BANCARIO]]></text>
+    </element>
+    <element kind="textField" uuid="c2c2c2c2-c2c2-42c2-c2c2-c2c2c2c2c2c2" x="0" y="40" width="535" height="22">
+      <expression><![CDATA["Beneficiario: " + $P{beneficiario}]]></expression>
+    </element>
+    <element kind="textField" uuid="d3d3d3d3-d3d3-43d3-d3d3-d3d3d3d3d3d3" x="0" y="68" width="535" height="22">
+      <expression><![CDATA["Valor: R$ " + $P{valor}]]></expression>
+    </element>
+    <element kind="textField" uuid="e4e4e4e4-e4e4-44e4-e4e4-e4e4e4e4e4e4" x="0" y="96" width="535" height="22">
+      <expression><![CDATA["Vencimento: " + $P{vencimento}]]></expression>
+    </element>
+  </title>
+</jasperReport>

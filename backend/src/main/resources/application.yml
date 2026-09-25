@@ -1,0 +1,26 @@
+spring:
+  application.name: conciliacao-api
+  threads.virtual.enabled: true
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/conciliacao}
+    username: ${DB_USER:conciliacao}
+    password: ${DB_PASSWORD:conciliacao}
+  jpa:
+    open-in-view: false
+    hibernate.ddl-auto: validate
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/migration.sql
+  rabbitmq:
+    host: ${RABBITMQ_HOST:localhost}
+    port: ${RABBITMQ_PORT:5672}
+    username: ${RABBITMQ_USER:guest}
+    password: ${RABBITMQ_PASSWORD:guest}
+server.port: ${SERVER_PORT:8080}
+server.error.include-message: always
+management.endpoints.web.exposure.include: health,info,metrics
+app:
+  retorno.queue: retorno-bancario
+  frontend-url: ${FRONTEND_URL:http://localhost:5173/}
+  legado.base-url: ${LEGADO_BASE_URL:http://localhost:8080/mock-legado}

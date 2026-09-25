@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment: { POSTGRES_DB: conciliacao, POSTGRES_USER: conciliacao, POSTGRES_PASSWORD: conciliacao }
+    ports: ["5433:5432"]
+    volumes: ["./backend/src/main/resources/db:/docker-entrypoint-initdb.d:ro", "pgdata:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U conciliacao -d conciliacao"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  rabbitmq:
+    image: rabbitmq:3.13-management-alpine
+    ports: ["5672:5672", "15672:15672"]
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/conciliacao
+      RABBITMQ_HOST: rabbitmq
+    ports: ["8080:8080"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+  frontend:
+    build: ./frontend
+    environment:
+      API_PROXY: http://api:8080
+    ports: ["5173:5173"]
+    depends_on:
+      api:
+        condition: service_started
+volumes: { pgdata: }

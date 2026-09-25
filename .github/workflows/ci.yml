@@ -1,0 +1,27 @@
+name: CI/CD
+on: [push, pull_request]
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "25"
+          cache: maven
+      - name: Build and verify
+        run: mvn -B verify
+      - name: SonarQube analysis
+        if: github.event_name == 'push'
+        run: mvn -B sonar:sonar -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+  deploy:
+    needs: quality
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build images
+        run: docker compose build
+      - name: Deploy hook
+        run: echo "Configure aqui o deploy no ambiente alvo (Azure Container Apps/Kubernetes)."
